@@ -145,6 +145,10 @@ def generate_output(person_tree, redcap_settings, email_settings, data_repositor
     ideal_time_per_request = 60 / float(rate_limiter_value_in_redcap)
     time_stamp_after_request = 0
 
+    events_per_write = 8
+    data_list = []
+    events_since_write = 0
+
     # main loop for each person
     for person in persons:
         time_begin = datetime.datetime.now()
@@ -213,37 +217,66 @@ def generate_output(person_tree, redcap_settings, email_settings, data_repositor
                     # to speedup testing uncomment the following line
                     # if (0 == event_count % 2) : continue
 
-                    try:
-                        found_error = False
-                        response = redcapClientObject.send_data_to_redcap([json_data_dict], overwrite = True)
-                        status = event.find('status')
-                        if status is not None:
-                            status.text = 'sent'
-                        else:
-                            status_element = etree.Element("status")
-                            status_element.text = 'sent'
-                            event.append(status_element)
-                        data_repository.store(person_tree)
-                    except RedcapError as e:
-                        found_error = handle_errors_in_redcap_xml_response(
-                            e.message,
-                            report_data)
+                    events_since_write += 1
+                    data_list.append(json_data_dict)
+
+                    # TODO: the following block updates the status field in
+                    #  memory before the event has been sent to redcap and before
+                    #  a rep;sonse has been received.  This is a sloppy hack.  It
+                    #  changes the state of the PFE Tree to somehting that does
+                    #  not reflect reality.  This status data might best be stored
+                    #  outside the PFE Tree.
+                    status = event.find('status')
+                    if status is not None:
+                        status.text = 'sent'
+                    else:
+                        status_element = etree.Element("status")
+                        status_element.text = 'sent'
+                        event.append(status_element)
+
+                    if events_since_write >= events_per_write:
+                        try:
+                            found_error = False
+                            #print json_data_dict
+                            response = redcapClientObject.send_data_to_redcap(data_list, overwrite = True)
+                            data_repository.store(person_tree)
+                        except RedcapError as e:
+                            found_error = handle_errors_in_redcap_xml_response(
+                                e.message,
+                                report_data)
+                        data_list = []
+                        events_since_write = 0
 
                     time_stamp_after_request = time.time()
 
-                    if contains_data:
-                        if not found_error:
-                            # if no errors encountered update event counters
-                            subject_details[study_id_key][form_key] += 1
-                            form_details[form_key] += 1
+                    # # This block needs to be reenabled in a way the respects batch processing
+                    # if contains_data:
+                    #     if not found_error:
+                    #         # if no errors encountered update event counters
+                    #         subject_details[study_id_key][form_key] += 1
+                    #         form_details[form_key] += 1
 
                 except Exception as e:
                     logger.error(e.message)
                     raise
 
         time_end = datetime.datetime.now()
-        logger.info("Total execution time for study_id %s was %s" % (study_id_key, (time_end - time_begin)))
+        # TODO this line was disabled for batch testing.  It might need to be re-enabled
+        #logger.info("Total execution time for study_id %s was %s" % (study_id_key, (time_end - time_begin)))
         logger.info("Total REDCap requests sent: %s \n" % (event_count))
+
+        if events_since_write > 0:
+            try:
+                found_error = False
+                response = redcapClientObject.send_data_to_redcap(data_list, overwrite = True)
+                data_repository.store(person_tree)
+            except RedcapError as e:
+                found_error = handle_errors_in_redcap_xml_response(
+                    e.message,
+                    report_data)
+            data_list = []
+            events_since_write = 0
+
 
     report_data.update({
         'total_subjects': person_count,
