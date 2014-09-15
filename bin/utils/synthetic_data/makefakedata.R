@@ -75,8 +75,8 @@ makeasetofpanels <- function (
 }
 
 makeapanel <- function (input_dataframe,
-    start_date="1900-01-01",
-    end_date="1900-12-31",
+    start_date,
+    end_date,
     incomplete_panels=FALSE) {
 
     # input_dataframe - a dataframe containing at a minimum a numeric named
