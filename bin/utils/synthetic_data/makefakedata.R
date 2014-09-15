@@ -25,13 +25,38 @@ makefakedata <- function(input,
     input_dataframe <- read.csv(input)
     minimal_input_dataframe <- input_dataframe[ c("loinc_component","loinc_code","low","high","units") ]
 
-    for (i in (min_panel:max_panel)) {
-        panel_df <- makeapanel(minimal_input_dataframe, start_date, end_date, incomplete_panels)
+    set_of_panels <- makeasetofpanels(minimal_input_dataframe,
+        min_panel,
+        max_panel,
+        incomplete_panels,
+        start_date,
+        end_date)
+
+    return (set_of_panels)
+}
+
+makeasetofpanels <- function (
+    input_df,
+    min_panel,
+    max_panel,
+    incomplete_panels,
+    start_date,
+    end_date) {
+    # Make an empty data frame to store the panels for one subject
+    set_of_panels <- data.frame()
+
+    # determine how many panels to make for this study subject
+    panels <- if (min_panel == max_panel)  5 else sample(min_panel:max_panel, 1)
+
+    # make the panels for one study subject
+    for (i in (1:panels)) {
+        panel_df <- makeapanel(input_df, start_date, end_date, incomplete_panels)
+        set_of_panels <- rbind(set_of_panels, panel_df)
     }
 
-    return (panel_df)
+    return(set_of_panels)
 }
-# result=runif(1, input_dataframe$low, input_dataframe$high),
+
 makeapanel <- function (input_dataframe, 
     start_date="1900-01-01",
     end_date="1900-12-31",
@@ -44,7 +69,7 @@ makeapanel <- function (input_dataframe,
             input_dataframe)
 
     # add a date column.
-    # Use a one row data frame trick rand.date into returning only one value
+    # Use a one row data frame to trick rand.date into returning only one date value
     x <- data.frame(dummy=1)
     output$date_time_stamp=rand.date(start_date, end_date, x)
 
