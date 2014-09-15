@@ -1,6 +1,6 @@
-makefakedata <- function(input, 
-    min_panel=1, 
-    max_panel=1, 
+makefakedata <- function(input,
+    min_panel=1,
+    max_panel=1,
     incomplete_panels=FALSE,
     start_date="2112-01-01",
     end_date="2112-12-31",
@@ -19,6 +19,10 @@ makefakedata <- function(input,
     # max_panel - the maximum number of panels to create for each subject
 
     # incomplete_panels - should we create panels with random missing values?
+
+    # start_date - the first date for which labs should be generated
+
+    # end_date - the last date for which labs should be generated
 
     # subject_count - the number of research subjects for which we should make data
 
@@ -42,6 +46,19 @@ makeasetofpanels <- function (
     incomplete_panels,
     start_date,
     end_date) {
+
+    # input_df - a dataframe from which other functions will make a panel
+
+    # min_panel - the minimum number of panels to create for each subject
+
+    # max_panel - the maximum number of panels to create for each subject
+
+    # incomplete_panels - should we create panels with random missing values?
+
+    # start_date - the first date for which labs should be generated
+
+    # end_date - the last date for which labs should be generated
+
     # Make an empty data frame to store the panels for one subject
     set_of_panels <- data.frame()
 
@@ -57,15 +74,24 @@ makeasetofpanels <- function (
     return(set_of_panels)
 }
 
-makeapanel <- function (input_dataframe, 
+makeapanel <- function (input_dataframe,
     start_date="1900-01-01",
     end_date="1900-12-31",
     incomplete_panels=FALSE) {
 
+    # input_dataframe - a dataframe containing at a minimum a numeric named
+    # "low" and a numeric named "high"
+
+    # incomplete_panels - should we create panels with random missing values?
+
+    # start_date - the first date for which labs should be generated
+
+    # end_date - the last date for which labs should be generated
+
     # add a result column with a random value within the accpetable range for each test
-    output <- cbind(result=runif(nrow(input_dataframe), 
-                        input_dataframe$low, 
-                        input_dataframe$high), 
+    output <- cbind(result=runif(nrow(input_dataframe),
+                        input_dataframe$low,
+                        input_dataframe$high),
             input_dataframe)
 
     # add a date column.

@@ -15,7 +15,5 @@ output_df <- makeasetofpanels(input_df,
         start_date = "1901-01-01",
         end_date = "1901-12-31")
 
-print (output_df)
-
 expect_equal(ncol(output_df) - ncol(input_df), 2)
 expect_equal(nrow(output_df), 5 * nrow(input_df))
