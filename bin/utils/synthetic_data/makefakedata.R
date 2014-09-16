@@ -136,9 +136,9 @@ makeapanel <- function (input_dataframe,
     # end_date - the last date for which labs should be generated
 
     # add a result column with a random value within the accpetable range for each test
-    output <- cbind(result=runif(nrow(input_dataframe),
+    output <- cbind(result=round(runif(nrow(input_dataframe),
                         input_dataframe$low,
-                        input_dataframe$high),
+                        input_dataframe$high), digits=3),
             input_dataframe)
 
     # add a date column.
