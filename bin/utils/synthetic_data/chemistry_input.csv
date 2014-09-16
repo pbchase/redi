@@ -1,15 +1,10 @@
-loinc_component,loinc_code,result,units,high,low,date_time_stamp,result_date,study_id,redcap_form_name,loinc_long_common_name
-Leukocytes,26464-8,,,,,,,,cbc,Leukocytes [#/volume] in Blood
-Neutrophils,26499-4,,,,,,,,cbc,Neutrophils [#/volume] in Blood
-Lymphocytes,26474-7,,,,,,,,cbc,Lymphocytes [#/volume] in Blood
-Platelets,26515-7,,,,,,,,cbc,Platelets [#/volume] in Blood
-Hemoglobin,718-7,,,,,,,,cbc,Hemoglobin [Mass/volume] in Blood
-Alanine aminotransferase,1742-6,,,,,,,,chemistry,Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma
-Aspartate aminotransferase,1920-8,,,,,,,,chemistry,Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma
-Bilirubin,1975-2,,,,,,,,chemistry,Bilirubin.total [Mass/volume] in Serum or Plasma
-Bilirubin.glucuronidated+Bilirubin.albumin bound,1968-7,,,,,,,,chemistry,Bilirubin.direct [Mass/volume] in Serum or Plasma
-Albumin,1751-7,,,,,,,,chemistry,Albumin [Mass/volume] in Serum or Plasma
-Creatinine,2160-0,,,,,,,,chemistry,Creatinine [Mass/volume] in Serum or Plasma
-Glucose,2339-0,,,,,,,,chemistry,Glucose [Mass/volume] in Blood
-Potassium,6298-4,,,,,,,,chemistry,Potassium [Moles/volume] in Blood
-Sodium,2947-0,,,,,,,,chemistry,Sodium [Moles/volume] in Blood
+loinc_component,loinc_code,low,high,units,redcap_form_name,loinc_long_common_name
+Alanine aminotransferase,1742-6,0,25,U/L,chemistry,Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma
+Aspartate aminotransferase,1920-8,0,25,U/L,chemistry,Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma
+Bilirubin,1975-2,0.3,1,mg/dl,chemistry,Bilirubin.total [Mass/volume] in Serum or Plasma
+Bilirubin.glucuronidated+Bilirubin.albumin bound,1968-7,0.1,0.3,mg/dl,chemistry,Bilirubin.direct [Mass/volume] in Serum or Plasma
+Albumin,1751-7,3.5,5.5,g/dl,chemistry,Albumin [Mass/volume] in Serum or Plasma
+Creatinine,2160-0,0.4,1.5,mg/dl,chemistry,Creatinine [Mass/volume] in Serum or Plasma
+Glucose,2339-0,65,99,mg/dL,chemistry,Glucose [Mass/volume] in Blood
+Potassium,6298-4,3.5,5.3,mmol/L,chemistry,Potassium [Moles/volume] in Blood
+Sodium,2947-0,135,146,mmol/L,chemistry,Sodium [Moles/volume] in Blood
