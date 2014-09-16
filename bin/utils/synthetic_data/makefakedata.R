@@ -29,14 +29,56 @@ makefakedata <- function(input,
     input_dataframe <- read.csv(input)
     minimal_input_dataframe <- input_dataframe[ c("loinc_component","loinc_code","low","high","units") ]
 
-    set_of_panels <- makeasetofpanels(minimal_input_dataframe,
-        min_panel,
-        max_panel,
-        incomplete_panels,
-        start_date,
-        end_date)
+    data <- makeasetofsubjects(minimal_input_dataframe,
+            min_panel,
+            max_panel,
+            incomplete_panels,
+            start_date,
+            end_date,
+            subject_count)
 
-    return (set_of_panels)
+    return(data)
+}
+
+makeasetofsubjects <- function (
+    input_df,
+    min_panel=1,
+    max_panel=1,
+    incomplete_panels=FALSE,
+    start_date,
+    end_date,
+    subject_count=1) {
+
+    # input_df - a dataframe from which other functions will make a panel
+
+    # min_panel - the minimum number of panels to create for each subject
+
+    # max_panel - the maximum number of panels to create for each subject
+
+    # incomplete_panels - should we create panels with random missing values?
+
+    # start_date - the first date for which labs should be generated
+
+    # end_date - the last date for which labs should be generated
+
+    # subject_count - the number of research subjects for which we should make data
+
+    data <- data.frame()
+
+    for (subject_id in (1:subject_count)) {
+        set_of_panels <- makeasetofpanels(input_df,
+            min_panel,
+            max_panel,
+            incomplete_panels,
+            start_date,
+            end_date)
+        study_id <- rep(subject_id, nrow(set_of_panels))
+        set_of_panels <- cbind(set_of_panels, study_id)
+        data <- rbind(data, set_of_panels)
+    }
+
+    return(data)
+
 }
 
 makeasetofpanels <- function (
