@@ -1,4 +1,5 @@
 makefakedata <- function(input,
+    output,
     min_panel=1,
     max_panel=1,
     incomplete_panels=FALSE,
@@ -13,6 +14,8 @@ makefakedata <- function(input,
     #   units - typical units for the component, compatible with low and high
     #   panel - a lab panel on which these tests are likely to appear
     #   loinc_long_common_name - a more descriptive name from LOINC
+
+    # output is a csv filename to which the fake data will be written
 
     # min_panel - the minimum number of panels to create for each subject
 
@@ -36,6 +39,8 @@ makefakedata <- function(input,
             start_date,
             end_date,
             subject_count)
+
+    write.csv(data, file=output, quote=TRUE, row.names=FALSE)
 
     return(data)
 }
