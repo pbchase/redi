@@ -9,8 +9,8 @@ makefakedata <- function(input,
     # input is a csv file with these columns:
     #   loinc_component - a name that describe a lab component
     #   loinc_code - the code for that lab component
-    #   low - a normal low value for that component
-    #   high - a normal high value for that component
+    #   low - a normal low value for that component (required)
+    #   high - a normal high value for that component (required)
     #   units - typical units for the component, compatible with low and high
     #   panel - a lab panel on which these tests are likely to appear
     #   loinc_long_common_name - a more descriptive name from LOINC
